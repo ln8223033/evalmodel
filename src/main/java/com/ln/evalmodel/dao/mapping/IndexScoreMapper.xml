@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ln.evalmodel.dao.IndexScoreMapper">
+
+
+    <select id="getIndexScoreDetailList" resultType="com.ln.evalmodel.model.vo.IndexScoreDetailVo">
+        SELECT
+	        i.id AS id,
+	        i.score AS score,
+            ei.id AS indexId,
+            ei.parent_id AS parent_id,
+            ei.leaf_node AS leafNode,
+            ei.levels AS levels,
+            ei.`name` AS NAME,
+            ei.num AS num,
+            ei.url AS url,
+            ei.weight AS weight
+        FROM
+            index_score i
+        INNER JOIN eval_index ei ON i.eval_index_id = ei.id
+        WHERE
+            ei.eval_model_id = #{evalModelId}
+        AND ei.parent_id= #{parentId}
+        AND i.evaluation_id = #{evaluationId}
+        ORDER BY ei.num asc
+    </select>
+</mapper>

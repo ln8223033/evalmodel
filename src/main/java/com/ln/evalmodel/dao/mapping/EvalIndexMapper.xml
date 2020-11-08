@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ln.evalmodel.dao.EvalIndexMapper">
+
+    <select id="getList" resultType="com.ln.evalmodel.model.vo.ListEvalIndexResp">
+        select ei.id,ei.eval_model_id,ei.parent_id,ei.name,ei.num,ei.create_time,ei.weight  from eval_index ei
+        where
+         ei.eval_model_id = #{req.evalModelId}
+         order by ei.num and ei.parent_id asc
+    </select>
+    <select id="indexTreeList" resultType="com.ln.evalmodel.node.ZTreeNode">
+     SELECT
+        m1.id AS id,
+        (
+        CASE
+        WHEN (m2.id = 0 OR m2.id IS NULL) THEN
+        0
+        ELSE
+        m2.id
+        END
+        ) AS pId,
+        m1. NAME
+        AS NAME,
+        (
+        CASE
+        WHEN (m2.id = 0 OR m2.id IS NULL) THEN
+        'true'
+        ELSE
+        'false'
+        END
+        ) as isOpen
+        FROM
+         eval_index m1
+        LEFT join eval_index m2 ON m1.parent_id = m2.id
+        ORDER BY
+        m1.id ASC
+
+    </select>
+</mapper>
